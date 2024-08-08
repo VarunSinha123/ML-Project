@@ -47,8 +47,34 @@ class ModelTrainer:
                 "KNN": KNeighborsRegressor(),
                 "CatBoost": CatBoostRegressor(verbose=False)
             }
+            
+            params = {
+                "Linear Regression": {},
+                "Decision Tree": {
+                    "criterion": ["squared_error", "friedman_mse", "absolute_error"],},
+                "Random Forest": {"n_estimators": [50,100,150,200,250]},
+                "AdaBoost": {
+                    "learning_rate": [0.01,0.05,0.1,0.3,0.5],
+                    "n_estimators": [50,100,150,200,250]},
+                "Gradient Boosting": {
+                    "n_estimators": [50,100,150,200,250],
+                    "learning_rate": [0.01,0.05,0.1,0.3,0.5],
+                    "subsample": [0.5,0.7,1.0]
+                },
+                "XGBoost": {
+                    "n_estimators": [50,100,150,200,250],
+                    "learning_rate": [0.01,0.05,0.1,0.3,0.5],
+                    },
+                "KNN": {"n_neighbors": [3,5,7,9,11]},
+                "CatBoost": {
+                    "iterations": [50,100,150,200,250],
+                    "learning_rate": [0.01,0.05,0.1,0.3,0.5],
+                    "depth": [3,5,7,9,11]
+                }
+            }
         
-            model_report: dict = evaluate_model(X_train=X_train, y_train=y_train, X_test=X_test, y_test=y_test, models=models)
+            model_report: dict = evaluate_model(X_train=X_train, y_train=y_train, X_test=X_test, y_test=y_test, models=models, params=params)
+            
             
             best_model_score = max(sorted(model_report.values()))
             

@@ -4,5 +4,7 @@ keras
 numpy
 pandas
 matplotlib
-
+seaborn
+catboost
+xgboost
 -e .

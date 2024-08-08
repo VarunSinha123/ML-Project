@@ -1,5 +1,5 @@
 import sys
-
+from src.logger import logging
 def error_message_details(error, error_details: tuple):
     _, _, exc_tb = error_details
     error_message = "Error occurred in python script name [{0}] line number [{1}] error message [{2}]".format(
@@ -13,4 +13,3 @@ class CustomException(Exception):
         
     def __str__(self):
         return self.error_message
-

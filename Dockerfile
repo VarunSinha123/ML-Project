@@ -1,19 +1,10 @@
-FROM python:3.9-slim-buster
+FROM python:3.9-slim
 
 WORKDIR /app
-
-# Copy the application files first
 COPY . /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    awscli \
-    ffmpeg \
-    libsm6 \
-    libxext6 \
-    unzip \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Install necessary packages using apt
+RUN apt-get update && apt-get install -y awscli ffmpeg libsm6 libxext6 unzip
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt

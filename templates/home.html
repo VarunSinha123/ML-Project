@@ -1,111 +1,916 @@
+<!DOCTYPE html>
 <html>
+<head>
+    <title>Math Score Predictor</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a0f3d, #4b2155, #20366b);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CiAgPHBhdHRlcm4gaWQ9InBhdHRlcm4iIHg9IjAiIHk9IjAiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICA8Y2lyY2xlIGN4PSIxMCIgY3k9IjEwIiByPSIxIiBmaWxsPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMSkiLz4KICA8L3BhdHRlcm4+CjwvZGVmcz4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPgo8L3N2Zz4=');
+            opacity: 0.4;
+            z-index: -3;
+        }
+        
+        /* Enhanced container effects */
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-top: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 2;
+            padding-bottom: 8rem;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #FF9D6C, #BB4E75, #6B8DE3, #FF9D6C);
+            border-radius: 32px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-10px) scale(1.01);
+            box-shadow: 0 15px 45px rgba(31, 38, 135, 0.4),
+                       0 0 30px rgba(255, 156, 108, 0.4),
+                       0 0 50px rgba(187, 78, 117, 0.3);
+        }
+
+        .container:hover::before {
+            opacity: 0.3;
+        }
+
+        .math-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+        }
+
+        .math-icon svg {
+            width: 80px;
+            height: 80px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, #FF9D6C, #BB4E75, #6B8DE3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        /* Enhanced form section effects */
+        .form-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 3;
+            pointer-events: auto;
+        }
+
+        .form-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(255, 157, 108, 0.1),
+                rgba(187, 78, 117, 0.1),
+                rgba(107, 141, 227, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .form-section:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-section:hover::after {
+            opacity: 1;
+        }
+
+        .form-label {
+            color: #fff;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        /* Enhanced form control effects */
+        .form-control {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 10px;
+            padding: 0.8rem;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 4;
+            pointer-events: auto;
+        }
+
+        .form-control:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-control:focus {
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(255, 156, 108, 0.3);
+        }
+
+        /* Enhanced button effects */
+        .btn-primary {
+            background: linear-gradient(45deg, #FF9D6C, #BB4E75);
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                rgba(255, 255, 255, 0.2),
+                rgba(255, 255, 255, 0.05));
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            background: linear-gradient(45deg, #BB4E75, #6B8DE3);
+        }
+
+        .btn-primary:hover::before {
+            transform: translateX(100%);
+        }
+
+        /* Enhanced prediction result effects */
+        .prediction-result {
+            text-align: center;
+            padding: 1.5rem;
+            background: linear-gradient(45deg, rgba(255, 156, 108, 0.2), rgba(107, 141, 227, 0.2));
+            border-radius: 15px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            animation: glow 2s ease-in-out infinite;
+            width: 100%;
+            max-width: 400px;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .prediction-result::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                circle,
+                rgba(255, 255, 255, 0.1) 0%,
+                transparent 70%
+            );
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes glow {
+            0% { 
+                box-shadow: 0 0 10px rgba(255, 215, 0, 0.5),
+                           0 0 20px rgba(255, 182, 193, 0.3);
+            }
+            50% { 
+                box-shadow: 0 0 25px rgba(255, 215, 0, 0.8),
+                           0 0 40px rgba(255, 182, 193, 0.5);
+            }
+            100% { 
+                box-shadow: 0 0 10px rgba(255, 215, 0, 0.5),
+                           0 0 20px rgba(255, 182, 193, 0.3);
+            }
+        }
+
+        /* Enhanced math symbols effects */
+        .math-symbols {
+            position: fixed;
+            background: linear-gradient(45deg, #FF6B94, #FFD700, #7B68EE);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 4rem;
+            z-index: -1;
+            animation: rotate 20s linear infinite,
+                       float 6s ease-in-out infinite;
+            opacity: 0.3;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+            pointer-events: none;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .form-section {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Add more math symbols and make them more visible */
+        .math-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -2;
+            opacity: 0.1;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .math-symbol {
+            position: absolute;
+            font-size: 2rem;
+            color: #fff;
+            animation: floatSymbol 8s infinite ease-in-out;
+            background: linear-gradient(45deg, #FF9D6C, #BB4E75, #6B8DE3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Add different floating animations for variety */
+        @keyframes floatSymbol {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(10px, -10px) rotate(5deg); }
+            50% { transform: translate(0, -20px) rotate(0deg); }
+            75% { transform: translate(-10px, -10px) rotate(-5deg); }
+        }
+
+        /* Add math formulas background to form sections */
+        .form-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(44, 7, 53, 0.9), rgba(44, 7, 53, 0.9)),
+                url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='10' y='30' fill='rgba(255,255,255,0.03)' font-size='20'%3E∑%3C/text%3E%3Ctext x='60' y='50' fill='rgba(255,255,255,0.03)' font-size='20'%3Eπ%3C/text%3E%3Ctext x='20' y='70' fill='rgba(255,255,255,0.03)' font-size='20'%3E∫%3C/text%3E%3Ctext x='70' y='90' fill='rgba(255,255,255,0.03)' font-size='20'%3E√%3C/text%3E%3C/svg%3E");
+            z-index: -1;
+            opacity: 0.1;
+            background-size: 100px 100px;
+        }
+
+        /* AI Assistant Styles */
+        .ai-assistant {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 400px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            pointer-events: none;
+            flex-direction: row-reverse;
+            transition: none;
+        }
+
+        .ai-bot-container {
+            width: 120px;
+            height: 120px;
+            position: relative;
+        }
+
+        .ai-bot-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            animation: floatBot 3s ease-in-out infinite;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
+        }
+
+        .ai-message {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            margin-right: 20px;
+            max-width: 250px;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(79, 172, 254, 0.3);
+            font-size: 0.95rem;
+            color: #2c3e50;
+        }
+
+        .ai-message.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        @keyframes floatBot {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Add smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Style for dropdown options */
+        select.form-control {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 16px 12px;
+            padding-right: 2.5rem;
+        }
+
+        /* Style for dropdown menu */
+        select.form-control option {
+            padding: 0.25rem 1rem;
+            font-size: 0.9rem;
+            background-color: white;
+        }
+
+        /* Custom dropdown styling */
+        select.form-control option:hover,
+        select.form-control option:focus,
+        select.form-control option:active,
+        select.form-control option:checked {
+            background: linear-gradient(45deg, #FF9D6C, #BB4E75);
+            color: white;
+        }
+
+        /* Adjust spacing between form elements */
+        .mb-3 {
+            margin-bottom: 1rem !important;
+        }
+
+        .typing-title {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            background: linear-gradient(45deg, #FF9D6C, #BB4E75, #6B8DE3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .typing-title::after {
+            content: '_';
+            position: relative;
+            color: #FF9D6C;
+            animation: blink 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @keyframes deleteText {
+            from { width: 100% }
+            to { width: 0 }
+        }
+
+        /* Ensure form elements are clickable */
+        select, input, button {
+            pointer-events: auto !important;
+            position: relative;
+            z-index: 5;
+        }
+    </style>
+</head>
 <body>
-    <div class="login">
-       <h1>Student Exam Performance Indicator</h1>
-   
-       <form action="{{ url_for('predict_datapoint')}}" method="post">
+    <!-- Math symbols background -->
+    <div class="math-symbols" style="top: 10%; left: 5%">∑</div>
+    <div class="math-symbols" style="top: 30%; right: 10%">π</div>
+    <div class="math-symbols" style="bottom: 20%; left: 15%">∫</div>
+    <div class="math-symbols" style="top: 50%; right: 20%">√</div>
+
+    <div class="container">
         <h1>
-            <legend>Student Exam Performance Prediction</legend>
+            <i class="math-icon">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Graduation Cap -->
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" 
+                          stroke="currentColor" 
+                          stroke-width="1.5"
+                          fill="url(#gradCap)"/>
+                    <path d="M2 7V17L12 22L22 17V7" 
+                          stroke="currentColor" 
+                          stroke-width="1.5"
+                          fill="url(#gradBody)"/>
+                    
+                    <!-- AI/ML Elements -->
+                    <circle cx="12" cy="15" r="4" 
+                            stroke="white" 
+                            stroke-width="0.5" 
+                            fill="url(#circleGrad)"/>
+                    
+                    <!-- Neural Network Nodes -->
+                    <circle cx="10" cy="13" r="1" fill="white"/>
+                    <circle cx="14" cy="13" r="1" fill="white"/>
+                    <circle cx="12" cy="17" r="1" fill="white"/>
+                    
+                    <!-- Connection Lines -->
+                    <path d="M10 13L12 17M14 13L12 17" 
+                          stroke="white" 
+                          stroke-width="0.5"/>
+                    
+                    <!-- Math Symbols -->
+                    <text x="9" y="15" font-size="2" fill="white">∑</text>
+                    <text x="13" y="15" font-size="2" fill="white">f(x)</text>
+                    
+                    <!-- Sparkles -->
+                    <path d="M18 4L19 5M20 2L21 3M19 2L18 3" 
+                          stroke="white" 
+                          stroke-width="0.5"/>
+                    <path d="M5 4L4 5M3 2L2 3M4 2L5 3" 
+                          stroke="white" 
+                          stroke-width="0.5"/>
+                    
+                    <!-- Gradient Definitions -->
+                    <defs>
+                        <linearGradient id="gradCap" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#FF9D6C"/>
+                            <stop offset="50%" style="stop-color:#BB4E75"/>
+                            <stop offset="100%" style="stop-color:#6B8DE3"/>
+                        </linearGradient>
+                        <linearGradient id="gradBody" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#BB4E75"/>
+                            <stop offset="50%" style="stop-color:#6B8DE3"/>
+                            <stop offset="100%" style="stop-color:#FF9D6C"/>
+                        </linearGradient>
+                        <linearGradient id="circleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:rgba(255,157,108,0.2)"/>
+                            <stop offset="100%" style="stop-color:rgba(107,141,227,0.2)"/>
+                        </linearGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                </svg>
+            </i><br>
+            <span class="typing-title"></span>
         </h1>
-        <div class="mb-3">
-            <label class="form-label">Gender</label>
-            <select class="form-control" name="gender" placeholder="Enter you Gender" required>
-                <option class="placeholder" selected disabled value="">Select your Gender</option>
-                <option value="male">
-                    Male
-                </option>
-                <option value="female">
-                    Female
-                </option>
-            </select>
+
+        <form action="{{ url_for('predict_datapoint')}}" method="post">
+            <div class="form-section">
+                <h4 class="text-center mb-4">Student Information</h4>
+                <div class="mb-3">
+                    <label class="form-label">Gender</label>
+                    <select class="form-control" name="gender" required>
+                        <option selected disabled value="">Select your Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Race or Ethnicity</label>
+                    <select class="form-control" name="ethnicity" placeholder="Enter you ethnicity" required>
+                        <option class="placeholder" selected disabled value="">Select Ethnicity</option>
+                        <option value="group A">
+                            Group A
+                        </option>
+                        <option value="group B">
+                            Group B
+                        </option>
+                        <option value="group C">
+                            Group C
+                        </option>
+                        <option value="group D">
+                            Group D
+                        </option>
+                        <option value="group E">
+                            Group E
+                        </option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Parental Level of Education</label>
+                    <select class="form-control" name="parental_level_of_education"
+                        placeholder="Enter you Parent Education" required>
+                        <option class="placeholder" selected disabled value="">Select Parent Education</option>
+                        <option value="associate's degree">
+                            associate's degree
+                        </option>
+                        <option value="bachelor's degree">
+                            bachelor's degree
+                        </option>
+                        <option value="high school">
+                            high school
+                        </option>
+                        <option value="master's degree">
+                            master's degree
+                        </option>
+                        <option value="some college">
+                            some college
+                        </option>
+                        <option value="some high school">
+                            some high school
+                        </option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Lunch Type</label>
+                    <select class="form-control" name="lunch" placeholder="Enter you Lunch" required>
+                        <option class="placeholder" selected disabled value="">Select Lunch Type</option>
+                        <option value="free/reduced">
+                            free/reduced
+                        </option>
+                        <option value="standard">
+                            standard
+                        </option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Test preparation Course</label>
+                    <select class="form-control" name="test_preparation_course" placeholder="Enter you Course"
+                        required>
+                        <option class="placeholder" selected disabled value="">Select Test_course</option>
+                        <option value="none">
+                            None
+                        </option>
+                        <option value="completed">
+                            Completed
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h4 class="text-center mb-4">Academic Information</h4>
+                <div class="mb-3">
+                    <label class="form-label">Writing Score (0-100)</label>
+                    <input class="form-control" type="number" name="reading_score"
+                        placeholder="Enter your Writing score" min='0' max='100' required />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Reading Score (0-100)</label>
+                    <input class="form-control" type="number" name="writing_score"
+                        placeholder="Enter your Reading score" min='0' max='100' required />
+                </div>
+            </div>
+
+            <div class="mb-4 position-relative">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-calculator me-2"></i>
+                    Calculate Math Score
+                </button>
+
+                {% if results is defined and results %}
+                <div class="prediction-result position-absolute start-50 translate-middle-x" style="top: 120%;">
+                    <i class="fas fa-chart-line me-2"></i>
+                    Predicted Math Score: {{ results }}
+                </div>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and Font Awesome -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
+
+    <!-- Add this right after the body tag -->
+    <div class="math-background">
+        <!-- Add more math symbols with different positions and animations -->
+        <span class="math-symbol" style="top: 5%; left: 10%;">∑</span>
+        <span class="math-symbol" style="top: 15%; left: 25%;">∫</span>
+        <span class="math-symbol" style="top: 25%; left: 15%;">π</span>
+        <span class="math-symbol" style="top: 35%; left: 30%;">√</span>
+        <span class="math-symbol" style="top: 45%; left: 20%;">∞</span>
+        <span class="math-symbol" style="top: 55%; left: 35%;">θ</span>
+        <span class="math-symbol" style="top: 65%; left: 25%;">∂</span>
+        <span class="math-symbol" style="top: 75%; left: 15%;">λ</span>
+        <span class="math-symbol" style="top: 85%; left: 30%;">μ</span>
+        <span class="math-symbol" style="top: 10%; right: 15%;">∇</span>
+        <span class="math-symbol" style="top: 20%; right: 25%;">∆</span>
+        <span class="math-symbol" style="top: 30%; right: 20%;">∏</span>
+        <span class="math-symbol" style="top: 40%; right: 30%;">∑</span>
+        <span class="math-symbol" style="top: 50%; right: 15%;">∫</span>
+        <span class="math-symbol" style="top: 60%; right: 25%;">≈</span>
+        <span class="math-symbol" style="top: 70%; right: 20%;">∝</span>
+        <span class="math-symbol" style="top: 80%; right: 30%;">∠</span>
+    </div>
+
+    <div class="ai-assistant">
+        <div class="ai-bot-container">
+            <img src="{{ url_for('static', filename='ai.png') }}" alt="AI Assistant" class="ai-bot-image">
         </div>
-        <div class="mb-3">
-            <label class="form-label">Race or Ethnicity</label>
-            <select class="form-control" name="ethnicity" placeholder="Enter you ethnicity" required>
-                <option class="placeholder" selected disabled value="">Select Ethnicity</option>
-                <option value="group A">
-                    Group A
-                </option>
-                <option value="group B">
-                    Group B
-                </option>
-                <option value="group C">
-                    Group C
-                </option>
-                <option value="group D">
-                    Group D
-                </option>
-                <option value="group E">
-                    Group E
-                </option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Parental Level of Education</label>
-            <select class="form-control" name="parental_level_of_education"
-                placeholder="Enter you Parent Education" required>
-                <option class="placeholder" selected disabled value="">Select Parent Education</option>
-                <option value="associate's degree">
-                    associate's degree
-                </option>
-                <option value="bachelor's degree">
-                    bachelor's degree
-                </option>
-                <option value="high school">
-                    high school
-                </option>
-                <option value="master's degree">
-                    master's degree
-                </option>
-                <option value="some college">
-                    some college
-                </option>
-                <option value="some high school">
-                    some high school
-                </option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Lunch Type</label>
-            <select class="form-control" name="lunch" placeholder="Enter you Lunch" required>
-                <option class="placeholder" selected disabled value="">Select Lunch Type</option>
-                <option value="free/reduced">
-                    free/reduced
-                </option>
-                <option value="standard">
-                    standard
-                </option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Test preparation Course</label>
-            <select class="form-control" name="test_preparation_course" placeholder="Enter you Course"
-                required>
-                <option class="placeholder" selected disabled value="">Select Test_course</option>
-                <option value="none">
-                    None
-                </option>
-                <option value="completed">
-                    Completed
-                </option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Writing Score out of 100</label>
-            <input class="form-control" type="number" name="reading_score"
-                placeholder="Enter your Reading score" min='0' max='100' />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Reading Score out of 100</label>
-            <input class="form-control" type="number" name="writing_score"
-                placeholder="Enter your Reading Score" min='0' max='100' />
-        </div>
-        <div class="mb-3">
-            <input class="btn btn-primary" type="submit" value="Predict your Maths Score" required />
-        </div>
-    </form>
-    <h2>
-       THE  prediction is {{results}}
-    </h2>
-   <body>
+        <div class="ai-message"></div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const aiMessage = document.querySelector('.ai-message');
+        const formControls = document.querySelectorAll('select, input');
+        const form = document.querySelector('form');
+        const aiAssistant = document.querySelector('.ai-assistant');
+        
+        // Set initial fixed position for AI assistant
+        const initialPosition = window.innerHeight / 2;
+        aiAssistant.style.top = `${initialPosition}px`;
+        
+        // Form field interactions
+        formControls.forEach(control => {
+            control.addEventListener('focus', function() {
+                showAiMessage(this);
+            });
+
+            control.addEventListener('change', function() {
+                showAiMessage(this);
+                checkAllFieldsFilled();
+            });
+
+            control.addEventListener('blur', function() {
+                if (!this.value) {
+                    showAiMessage({ type: 'initial' });
+                }
+            });
+        });
+
+        // Check if all fields are filled
+        function checkAllFieldsFilled() {
+            const allFields = Array.from(formControls);
+            const allFilled = allFields.every(field => field.value.trim() !== '');
+            
+            if (allFilled) {
+                showAiMessage({ type: 'ready' });
+            }
+        }
+
+        // Handle form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            showAiMessage({ type: 'calculating' });
+            
+            fetch("{{ url_for('predict_datapoint') }}", {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(html => {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                const result = tempDiv.querySelector('.prediction-result');
+                
+                let predictionDiv = document.querySelector('.prediction-result');
+                if (!predictionDiv) {
+                    predictionDiv = document.createElement('div');
+                    predictionDiv.className = 'prediction-result';
+                    form.after(predictionDiv);
+                }
+                
+                if (result) {
+                    predictionDiv.innerHTML = result.innerHTML;
+                    predictionDiv.style.display = 'block';
+                    
+                    const score = result.textContent.match(/\d+/);
+                    if (score) {
+                        showAiMessage({ 
+                            type: 'result', 
+                            score: score[0] 
+                        });
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showAiMessage({ type: 'error' });
+            });
+        });
+
+        // Show AI messages
+        function showAiMessage(element) {
+            let message = '';
+            
+            if (element.type === 'initial') {
+                message = "👋 Hello! Click on any field to start filling your information.";
+            }
+            else if (element.type === 'ready') {
+                message = "✨ All fields are filled! Click 'Calculate Math Score' to see your prediction!";
+            }
+            else if (element.type === 'calculating') {
+                message = "🧮 Calculating your math score...";
+            }
+            else if (element.type === 'result') {
+                message = `Predicted Math Score: ${element.score}`;
+            }
+            else if (element.type === 'error') {
+                message = "Sorry, there was an error calculating the score. Please try again.";
+            }
+            else if (element.type === 'select-one') {
+                const fieldName = element.name.replace(/_/g, ' ');
+                if (!element.value) {
+                    message = `Select ${fieldName}`;
+                } else {
+                    const selectedText = element.options[element.selectedIndex].text;
+                    message = `Selected ${fieldName}: ${selectedText}`;
+                }
+            } 
+            else if (element.type === 'number') {
+                const fieldName = element.name.includes('reading') ? 'Reading' : 'Writing';
+                if (!element.value) {
+                    message = `Enter ${fieldName} score (0-100)`;
+                } else {
+                    const score = parseInt(element.value);
+                    message = `${fieldName} Score: ${score}`;
+                }
+            }
+
+            if (message) {
+                aiMessage.textContent = message;
+                aiMessage.classList.add('show');
+            }
+        }
+
+        // Show initial message
+        showAiMessage({ type: 'initial' });
+    });
+    </script>
+
+    <!-- Add this script right before the closing </body> tag -->
+    <script>
+        // Clear form data and prediction on page load/reload
+        window.onload = function() {
+            // Clear all form inputs
+            const form = document.querySelector('form');
+            if (form) {
+                form.reset();
+            }
+
+            // Clear prediction result if it exists
+            const predictionResult = document.querySelector('.prediction-result');
+            if (predictionResult) {
+                predictionResult.style.display = 'none';
+                predictionResult.textContent = ''; // Clear the text content
+            }
+
+            // Reset AI message
+            const aiMessage = document.querySelector('.ai-message');
+            if (aiMessage) {
+                aiMessage.classList.remove('show');
+                aiMessage.textContent = '';
+            }
+
+            // Clear URL parameters
+            if (window.history.replaceState) {
+                window.history.replaceState({}, '', window.location.pathname);
+            }
+
+            // Clear any stored form data
+            sessionStorage.clear();
+            localStorage.clear();
+
+            // Clear any Flask flash messages or session data
+            fetch(window.location.pathname, {
+                method: 'GET',
+                headers: {
+                    'Cache-Control': 'no-cache'
+                }
+            });
+        };
+
+        // Prevent form resubmission on page refresh
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+
+        // Additional handler for before page unload
+        window.addEventListener('beforeunload', function() {
+            const predictionResult = document.querySelector('.prediction-result');
+            if (predictionResult) {
+                predictionResult.style.display = 'none';
+                predictionResult.textContent = '';
+            }
+        });
+    </script>
+
+    <script>
+        // Typing animation for title
+        function setupTitleAnimation() {
+            const titleElement = document.querySelector('.typing-title');
+            const titles = [
+                "Math Score Prediction System",
+                "AI-Powered Score Calculator",
+                "Student Performance Predictor",
+                "Math Success Analyzer"
+            ];
+            let currentTitleIndex = 0;
+
+            function animateTitle() {
+                // Clear current title
+                titleElement.style.animation = 'deleteText 1.5s steps(40, end)';
+                
+                setTimeout(() => {
+                    // Update to next title
+                    currentTitleIndex = (currentTitleIndex + 1) % titles.length;
+                    titleElement.textContent = titles[currentTitleIndex];
+                    
+                    // Start typing animation
+                    titleElement.style.animation = 'typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite';
+                }, 1500);
+            }
+
+            // Set initial title
+            titleElement.textContent = titles[0];
+            
+            // Start animation cycle
+            setInterval(animateTitle, 5000);
+        }
+
+        // Start the animation when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setupTitleAnimation();
+            // ... rest of your existing DOMContentLoaded code ...
+        });
+    </script>
+</body>
 </html>
